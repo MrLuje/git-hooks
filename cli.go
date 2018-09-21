@@ -384,7 +384,7 @@ func runHook(hook string, args ...string) (int, error) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	fmt.Printf("*** %v\n", hook)
+	fmt.Printf("*** RUNNING %v\n", hook)
 	var err error
 	var status = 0
 

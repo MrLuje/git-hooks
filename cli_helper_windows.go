@@ -10,6 +10,14 @@ func toPOSIX(hook string) string {
 }
 
 func prepareCmd(hook string, args []string) *exec.Cmd {
+	if isBashExecutable(hook) {
+		return asBashCmd(hook, args)
+	}
+
+	return exec.Command(hook, args...)
+}
+
+func asBashCmd(hook string, args []string) *exec.Cmd {
 	_hook := toPOSIX(hook)
 	_args := append([]string{"-c", _hook}, args...)
 
