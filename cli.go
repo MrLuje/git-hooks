@@ -2,10 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/blang/semver"
-	"github.com/codegangsta/cli"
-	"github.com/google/go-github/github"
-	"github.com/mitchellh/go-homedir"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -13,6 +9,11 @@ import (
 	"runtime"
 	"strings"
 	"syscall"
+
+	"github.com/blang/semver"
+	"github.com/codegangsta/cli"
+	"github.com/google/go-github/github"
+	"github.com/mitchellh/go-homedir"
 )
 
 func main() {
@@ -378,12 +379,18 @@ func runConfigHooks(configs map[string]string, contrib string, current string, a
 
 // Execute specific hook with arguments
 // Return error message as out if error occured
-func runHook(hook string, args ...string) (status int, err error) {
-	cmd := exec.Command(hook, args...)
+func runHook(hook string, args ...string) (int, error) {
+	cmd := prepareCmd(hook, args)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	if err = cmd.Run(); err != nil {
+	fmt.Printf("*** %v\n", hook)
+	var err error
+	var status = 0
+
+	err = cmd.Run()
+
+	if err != nil {
 		if exiterr, ok := err.(*exec.ExitError); ok {
 			if waitStatus, ok := exiterr.Sys().(syscall.WaitStatus); ok {
 				return waitStatus.ExitStatus(), err
@@ -395,10 +402,11 @@ func runHook(hook string, args ...string) (status int, err error) {
 		} else {
 			// exit status unknown
 			status = 255
+			fmt.Printf("err %v\n", err)
 		}
 	}
 
-	return
+	return status, err
 }
 
 func installInto(dir string, template string) {

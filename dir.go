@@ -2,12 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/cattail/go-exclude"
-	"github.com/mitchellh/go-homedir"
 	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
+
+	"github.com/cattail/go-exclude"
+	"github.com/mitchellh/go-homedir"
 )
 
 // list directories for project, user and global scopes
@@ -118,13 +119,13 @@ func listHooksInDir(scope, dirname string) (hooks map[string][]string, err error
 							for _, lib := range libs {
 								libname := lib.Name()
 								extension := filepath.Ext(libname)
-								if isExecutable(lib) && libname[0:len(libname)-len(extension)] == dir.Name() {
+								if isExecutable(lib, filepath.Join(dirname, dir.Name(), file.Name())) && libname[0:len(libname)-len(extension)] == dir.Name() {
 									hooks[dir.Name()] = append(hooks[dir.Name()], filepath.Join(file.Name(), libname))
 								}
 							}
 						}
 					} else {
-						if isExecutable(file) {
+						if isExecutable(file, filepath.Join(dirname, dir.Name())) {
 							hooks[dir.Name()] = append(hooks[dir.Name()], file.Name())
 						}
 					}

@@ -1,0 +1,17 @@
+package main
+
+import (
+	"os/exec"
+	"strings"
+)
+
+func toPOSIX(hook string) string {
+	return "/" + strings.Replace(strings.Replace(hook, ":\\", "/", -1), "\\", "/", -1)
+}
+
+func prepareCmd(hook string, args []string) *exec.Cmd {
+	_hook := toPOSIX(hook)
+	_args := append([]string{"-c", _hook}, args...)
+
+	return exec.Command("bash", _args...)
+}

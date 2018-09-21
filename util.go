@@ -4,7 +4,6 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
-	"github.com/codegangsta/cli"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -13,6 +12,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+
+	"github.com/codegangsta/cli"
 )
 
 func getGitRepoRoot() (string, error) {
@@ -186,8 +187,4 @@ func absExePath(exe string) (name string, err error) {
 		name, err = os.Readlink(name)
 	}
 	return
-}
-
-func isExecutable(info os.FileInfo) bool {
-	return info.Mode()&0111 != 0
 }
