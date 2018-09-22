@@ -1,0 +1,29 @@
+version: 1.0.0.{build}
+
+platform: x64
+
+branches:
+  only:
+    - windows_support
+
+clone_folder: c:\gopath\src\github.com\mrluje\git-hooks
+
+environment:
+  GOPATH: c:\gopath
+
+install:
+  - echo %PATH%
+  - echo %GOPATH%
+  - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
+  - go version
+  - go env
+
+build_script:
+  - go build
+
+test_script:
+  - go test ./...
+
+artifacts:
+  - path: git-hooks.exe
+    name: binary
