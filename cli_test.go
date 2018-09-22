@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/google/go-github/github"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -14,12 +12,31 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/google/go-github/github"
+	"github.com/stretchr/testify/assert"
 )
+
+var tempFolders = make([]string, 0)
+
+func TestMain(m *testing.M) {
+	exitCode := m.Run()
+
+	for _, folder := range tempFolders {
+		if err := os.RemoveAll(folder); err != nil {
+			fmt.Printf("Failed to remove temp dir %v\n", err)
+		}
+	}
+
+	os.Exit(exitCode)
+}
 
 // Create temporary directory
 func createDirectory(t *testing.T, dir string, context func(tempdir string)) {
 	tempdir, err := ioutil.TempDir(dir, "git-hooks")
 	assert.Nil(t, err)
+
+	tempFolders = append(tempFolders, tempdir)
 
 	current, err := os.Getwd()
 	assert.Nil(t, err)
@@ -33,7 +50,11 @@ func createDirectory(t *testing.T, dir string, context func(tempdir string)) {
 	assert.Nil(t, err)
 
 	err = os.RemoveAll(tempdir)
-	assert.Nil(t, err)
+
+	// FS is not reliable on windows, git process may still be locking the folders
+	if runtime.GOOS != "windows" {
+		assert.Nil(t, err)
+	}
 }
 
 // Create temporary git repo
