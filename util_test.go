@@ -2,15 +2,30 @@ package main
 
 import (
 	"fmt"
-	"github.com/codegangsta/cli"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"testing"
+
+	"github.com/codegangsta/cli"
+	"github.com/stretchr/testify/assert"
 )
+
+func skipTestIfWindows(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip(fmt.Sprintf("skipping %s; current OS is not unix", t.Name()))
+	}
+}
+
+func skipTestIfUnix(t *testing.T) {
+	if runtime.GOOS == "unix" {
+		t.Skip(fmt.Sprintf("skipping %s; current OS is not windows", t.Name()))
+	}
+}
 
 func TestGetGitRoot(t *testing.T) {
 	root, err := getGitRepoRoot()
@@ -95,6 +110,8 @@ func TestExtract(t *testing.T) {
 }
 
 func TestAbsExePath(t *testing.T) {
+	skipTestIfWindows(t)
+
 	path, err := absExePath("ls")
 	assert.Nil(t, err)
 	assert.Equal(t, "/bin/ls", path)
@@ -111,7 +128,25 @@ func TestAbsExePath(t *testing.T) {
 }
 
 func TestIsExecutable(t *testing.T) {
-	fileinfo, err := os.Stat("/bin/ls")
+	var path string
+
+	if runtime.GOOS == "windows" {
+		path, _ = exec.LookPath(filepath.Clean("git"))
+	} else {
+		path = "/bin/ls"
+	}
+
+	fileinfo, err := os.Stat(path)
 	assert.Nil(t, err)
-	assert.True(t, isExecutable(fileinfo))
+	assert.True(t, isExecutable(fileinfo, filepath.Dir(path)))
+}
+
+func TestNotIsExecutable(t *testing.T) {
+	skipTestIfUnix(t)
+
+	path, _ := exec.LookPath(filepath.Clean("license.txt"))
+
+	fileinfo, err := os.Stat(path)
+	assert.Nil(t, err)
+	assert.False(t, isExecutable(fileinfo, filepath.Dir(path)))
 }
