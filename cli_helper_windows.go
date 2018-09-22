@@ -17,6 +17,7 @@ func prepareCmd(hook string, args []string) *exec.Cmd {
 	return exec.Command(hook, args...)
 }
 
+// asBashCmd execute the hook through bash -c
 func asBashCmd(hook string, args []string) *exec.Cmd {
 	_hook := toPOSIX(hook)
 	_args := append([]string{"-c", _hook}, args...)

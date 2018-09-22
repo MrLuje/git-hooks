@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"runtime"
 )
 
 var VERSION = "v1.1.3"
@@ -44,4 +45,8 @@ var MESSAGES = map[string]string{
 
 func isTestEnv() bool {
 	return ENV == "test"
+}
+
+func isWindow() bool {
+	return runtime.GOOS == "windows"
 }

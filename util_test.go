@@ -16,13 +16,13 @@ import (
 )
 
 func skipTestIfWindows(t *testing.T) {
-	if runtime.GOOS == "windows" {
+	if isWindow() {
 		t.Skip(fmt.Sprintf("skipping %s; current OS is not unix", t.Name()))
 	}
 }
 
 func skipTestIfUnix(t *testing.T) {
-	if runtime.GOOS != "windows" {
+	if !isWindow() {
 		t.Skip(fmt.Sprintf("skipping %s; current OS is not windows", t.Name()))
 	}
 }

@@ -94,6 +94,9 @@ func TestList(t *testing.T) {
 		cmd := exec.Command("git", "hooks", "install")
 		err := cmd.Run()
 		assert.Nil(t, err)
+		if err != nil {
+			fmt.Printf("err: %v", err.Error())
+		}
 
 		list()
 		assert.Equal(t, MESSAGES["Installed"], logger.infos[0])
