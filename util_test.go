@@ -22,7 +22,7 @@ func skipTestIfWindows(t *testing.T) {
 }
 
 func skipTestIfUnix(t *testing.T) {
-	if runtime.GOOS == "unix" {
+	if runtime.GOOS != "windows" {
 		t.Skip(fmt.Sprintf("skipping %s; current OS is not windows", t.Name()))
 	}
 }
