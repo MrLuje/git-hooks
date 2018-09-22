@@ -1,5 +1,5 @@
 test:
-	go install github.com/git-hooks/git-hooks
+	go install
 	ENV=test go test -v ./...
 
 clean:
