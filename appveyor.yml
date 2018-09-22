@@ -17,6 +17,8 @@ install:
   - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
   - go version
   - go env
+  - go get github.com/tools/godep
+  - godep restore ./...
 
 build_script:
   - go build
