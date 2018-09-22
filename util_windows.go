@@ -9,8 +9,6 @@ import (
 )
 
 func isBashExecutable(file string) bool {
-	return true
-
 	mime, err := getFileMimeType(file)
 	if err != nil {
 		return false
