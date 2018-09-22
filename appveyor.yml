@@ -10,6 +10,7 @@ clone_folder: c:\gopath\src\github.com\mrluje\git-hooks
 
 environment:
   GOPATH: c:\gopath
+  ENV: test
 
 install:
   - echo %PATH%
@@ -24,7 +25,7 @@ build_script:
   - go build
 
 test_script:
-  - go test ./...
+  - go test -v ./...
 
 artifacts:
   - path: git-hooks.exe
