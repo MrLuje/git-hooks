@@ -2,10 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/blang/semver"
-	"github.com/codegangsta/cli"
-	"github.com/google/go-github/github"
-	"github.com/mitchellh/go-homedir"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -13,6 +9,11 @@ import (
 	"runtime"
 	"strings"
 	"syscall"
+
+	"github.com/blang/semver"
+	"github.com/codegangsta/cli"
+	"github.com/google/go-github/github"
+	"github.com/mitchellh/go-homedir"
 )
 
 func main() {
@@ -89,6 +90,11 @@ func list() {
 		logger.Infoln(MESSAGES["Installed"])
 	} else {
 		logger.Infoln(MESSAGES["NotInstalled"])
+	}
+
+	if err := platformChecks(); err != nil {
+		logger.Infoln(err.Error())
+		logger.Infoln()
 	}
 
 	for scope, dir := range hookDirs() {
@@ -379,7 +385,7 @@ func runConfigHooks(configs map[string]string, contrib string, current string, a
 // Execute specific hook with arguments
 // Return error message as out if error occured
 func runHook(hook string, args ...string) (status int, err error) {
-	cmd := exec.Command(hook, args...)
+	cmd := prepareCmd(hook, args)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
