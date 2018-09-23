@@ -92,6 +92,11 @@ func list() {
 		logger.Infoln(MESSAGES["NotInstalled"])
 	}
 
+	if err := platformChecks(); err != nil {
+		logger.Infoln(err.Error())
+		logger.Infoln()
+	}
+
 	for scope, dir := range hookDirs() {
 		logger.Infoln(scope + " hooks")
 

@@ -21,7 +21,7 @@ func isBashExecutable(file string) bool {
 func getFileMimeType(path string) (string, error) {
 	b, err := exec.Command("file", []string{path, "--mime-type"}...).Output()
 	if err != nil {
-		logger.Errorln("Can't get mime-type of %v: %s", path, err)
+		logger.Infoln(fmt.Sprintf("Can't get mime-type of %v: %s", path, err))
 		return "", err
 	}
 
@@ -32,7 +32,7 @@ func getFileMimeType(path string) (string, error) {
 func getFindLocation() (string, error) {
 	b, err := exec.Command("where", "find").Output()
 	if err != nil {
-		logger.Errorln("Can't get location of find.exe: %s", err)
+		logger.Infoln("Can't get location of find.exe: " + err.Error())
 		return "", err
 	}
 
@@ -57,7 +57,7 @@ func isExecutable(info os.FileInfo, folder string) bool {
 	fullpathToFile := filepath.Join(folder, fileName)
 	b, err := exec.Command(findPath, []string{fullpathToFile, "-maxdepth", "1", "-executable", "-type", "f"}...).Output()
 	if err != nil {
-		logger.Errorln("Can't ensure %v is an executable: %s", fullpathToFile, err)
+		logger.Infoln(fmt.Sprintf("Can't ensure %v is an executable: %s", fullpathToFile, err))
 		return false
 	}
 

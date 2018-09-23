@@ -32,15 +32,16 @@ var GIT = map[string]string{
 }
 
 var MESSAGES = map[string]string{
-	"NotGitRepo":     "Current directory is not a git repo",
-	"Installed":      "Git hooks ARE installed in this repository.",
-	"NotInstalled":   "Git hooks are NOT installed in this repository. (Run 'git hooks install' to install it)",
-	"ExistHooks":     "hooks.old already exists, perhaps you already installed?",
-	"NotExistHooks":  "Error, hooks.old doesn't exists, aborting uninstall to not destroy something",
-	"Restore":        "Restore hooks.old",
-	"SetTemplateDir": "Git global config init.templatedir is now set to ",
-	"UpdateToDate":   "git-hooks is update to date",
-	"Incompatible":   "Version backward incompatible, manually update required",
+	"NotGitRepo":             "Current directory is not a git repo",
+	"Installed":              "Git hooks ARE installed in this repository.",
+	"NotInstalled":           "Git hooks are NOT installed in this repository. (Run 'git hooks install' to install it)",
+	"ExistHooks":             "hooks.old already exists, perhaps you already installed?",
+	"NotExistHooks":          "Error, hooks.old doesn't exists, aborting uninstall to not destroy something",
+	"Restore":                "Restore hooks.old",
+	"SetTemplateDir":         "Git global config init.templatedir is now set to ",
+	"UpdateToDate":           "git-hooks is update to date",
+	"Incompatible":           "Version backward incompatible, manually update required",
+	"WindowsToolingNotFound": "Some mandatory tools cannot be found: ",
 }
 
 func isTestEnv() bool {
