@@ -25,6 +25,7 @@ build_script:
   - go build
 
 test_script:
+  - go install
   - go test -v ./...
 
 artifacts:
