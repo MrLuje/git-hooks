@@ -22,6 +22,12 @@ func hookDirs() map[string]string {
 		isExist, _ := exists(path)
 		if isExist {
 			dirs["project"] = path
+		} else {
+			path := filepath.Join(root, ".githooks")
+			isExist, _ := exists(path)
+			if isExist {
+				dirs["project"] = path
+			}
 		}
 	}
 
